@@ -44,7 +44,7 @@ namespace Tableproj.Model
 
         public void SetRowName(string name, int row)
         {
-            ex.Sheets[1].Cells[row, 2].Value = name;
+            ex.Sheets[1].Cells[row, 1].Value = name;
         }
 
         //public void AutoF()
@@ -68,8 +68,19 @@ namespace Tableproj.Model
             string[] subd = data.Split(' ');
             for (int i = 0; i < subd.Length; i++)
             {
-                ex.Cells[row, i + 3].Value = subd[i];
+                ex.Cells[row, i + 2].Value = subd[i];
             }
+        }
+
+        public void SwitchRows(int row1, int row2)
+        {
+            Worksheet sheet = ex.Sheets[1];
+            for (int i = 2; i < 12; i++)
+            {
+                double buffer = sheet.Cells[row1, i].Value;
+                sheet.Cells[row1, i].Value = sheet.Cells[row2, i].Value;
+                sheet.Cells[row2, i].Value = buffer;
+            }         
         }
     }
 }
