@@ -11,6 +11,9 @@ namespace Tableproj.Model
     {
         public Application ex { get; set; }
 
+
+
+
         public ExcelClass()
         {
             ex = new Application();
@@ -47,12 +50,6 @@ namespace Tableproj.Model
             ex.Sheets[1].Cells[row, 1].Value = name;
         }
 
-        //public void AutoF()
-        //{
-        //    Worksheet sheet = ex.Worksheets.Item[1];
-        //    ((Worksheet)sheet.Columns[1]).
-        //}
-
         public void Show()
         {
             ex.Visible = true;
@@ -72,15 +69,16 @@ namespace Tableproj.Model
             }
         }
 
-        public void SwitchRows(int row1, int row2)
+        public void SwitchRows(int row1, int row2, int count)
         {
             Worksheet sheet = ex.Sheets[1];
-            for (int i = 2; i < 12; i++)
+            for (int i = 1; i < count; i++)
             {
                 double buffer = sheet.Cells[row1, i].Value;
                 sheet.Cells[row1, i].Value = sheet.Cells[row2, i].Value;
                 sheet.Cells[row2, i].Value = buffer;
-            }         
+            }
         }
+
     }
 }
