@@ -21,18 +21,20 @@ namespace Tableproj.Model
 
         public int Columns { get; set; }
 
+        public List<List<int>> Groups { get; set; }
+
         public MatrixClass(int rows, int columns)
         {
-            DataMatrix= new double[rows+1, columns+1];
-            Rows= rows+1;
-            Columns= columns+1;
-            DistanceMatrix = new double[rows+1, rows+1];
-            SimilarityMatrix = new double[rows+1, rows+1];
+            DataMatrix = new double[rows + 1, columns + 1];
+            Rows = rows + 1;
+            Columns = columns + 1;
+            DistanceMatrix = new double[rows + 1, rows + 1];
+            SimilarityMatrix = new double[rows + 1, rows + 1];
         }
 
         public void FillMartixRandom()
         {
-            Random random= new Random();
+            Random random = new Random();
             for (int i = 1; i < Rows; i++)
             {
                 for (int j = 1; j < Columns; j++)
@@ -57,12 +59,12 @@ namespace Tableproj.Model
             {
                 for (int j = 0; j < Columns; j++)
                 {
-                    Console.Write(DataMatrix[i,j]);
+                    Console.Write(DataMatrix[i, j]);
                     Console.Write("\t");
                 }
                 Console.WriteLine();
             }
-            
+
         }
 
         public void PrintDistanceMatrix()
@@ -107,7 +109,7 @@ namespace Tableproj.Model
                 else if (row2[i] == 1 && row1[i] != 1) p01++;
                 else p00++;
             }
-            
+
             if (method == 1) return Math.Round(p11 / (p11 + p10 + p01 + p00), 2);
             else if (method == 2) return Math.Round(((p11 + p00) / (p11 + p10 + p01 + p00)), 2);
             //else if (method == 3) return p11 / (p11 + p10 + p01);
@@ -127,7 +129,7 @@ namespace Tableproj.Model
 
         public void CalculateSimilarity()
         {
-            
+
             for (int i = 0; i < Rows; i++)
             {
                 SimilarityMatrix[i, 0] = i;
@@ -137,8 +139,8 @@ namespace Tableproj.Model
             for (int i = 1; i < Rows; i++)
             {
                 for (int j = 1; j < Rows; j++)
-                {                   
-                    SimilarityMatrix[i,j] = Similarity(GetRow(i), GetRow(j), 3); 
+                {
+                    SimilarityMatrix[i, j] = Similarity(GetRow(i), GetRow(j), 3);
                 }
             }
         }
@@ -168,6 +170,82 @@ namespace Tableproj.Model
                 {
                     DistanceMatrix[i, j] = Distance(GetRow(i), GetRow(j));
                 }
+            }
+        }
+
+        public void SetCriticalDistance(double criticalDistance)
+        {
+            for (int i = 1; i < Rows; i++)
+            {
+                for (int j = 1; j < Rows; j++)
+                {
+                    if (DistanceMatrix[i, j] <= criticalDistance)
+                    {
+                        DistanceMatrix[i, j] = 1;
+                    }
+                    else { DistanceMatrix[i, j] = 0; }
+                }
+            }
+        }
+
+        public void TransitiveClosure()
+        {
+            int i, j, k;
+
+            for (k = 1; k < Rows; k++)
+            {
+                for (i = 1; i < Rows; i++)
+                {
+                    for (j = 1; j < Rows; j++)
+                    {
+                        if (DistanceMatrix[i, k] == 1 && DistanceMatrix[k, j] == 1)
+                        {
+                            DistanceMatrix[i, j] = 1;
+                        }
+                    }
+                }
+            }
+        }
+
+        public void DFS(bool[] visited, int i, List<int> group)
+        {
+            visited[i] = true;
+            group.Add(i);
+
+            for (int j = 1; j < visited.Length; j++)
+            {
+                if (DistanceMatrix[i, j] == 1 && !visited[j])
+                {
+                    DFS(visited, j, group);
+                }
+            }
+        }
+
+        public void FindGroups()
+        {
+            Groups = new List<List<int>>();
+            bool[] visited = new bool[Rows];
+
+            for (int i = 1; i < Rows; i++)
+            {
+                if (!visited[i - 1])
+                {
+                    List<int> group = new List<int>();
+                    DFS(visited, i, group);
+                    Groups.Add(group);
+                }
+            }
+        }
+
+        public void PrintGroups()
+        {
+            foreach (List<int> group in Groups)
+            {
+                foreach (int i in group)
+                {
+                    Console.Write($"{i}\t");
+                }
+                Console.WriteLine();
             }
         }
 

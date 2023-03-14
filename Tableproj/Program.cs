@@ -25,12 +25,27 @@
 ////excel.SaveFile("doc.xlsx");
 ///
 
-MatrixClass matrix = new MatrixClass(20, 5);
+MatrixClass matrix = new MatrixClass(10, 5);
 matrix.FillMartixRandom();
+Console.WriteLine("Base matrix");
 matrix.PrintDataMatrix();
 Console.WriteLine();
 matrix.CalculateSimilarity();
+Console.WriteLine("Similarity martix");
 matrix.PrintSimilarityMatrix();
 matrix.CalculateDistance();
 Console.WriteLine();
+Console.WriteLine("Distance matrix");
 matrix.PrintDistanceMatrix();
+Console.WriteLine();
+matrix.SetCriticalDistance(1);
+Console.WriteLine("Distance matrix aftrer critical distance");
+matrix.PrintDistanceMatrix();
+Console.WriteLine();
+matrix.TransitiveClosure();
+Console.WriteLine("Transitive Closure");
+matrix.PrintDistanceMatrix();
+matrix.FindGroups();
+Console.WriteLine();
+Console.WriteLine("Groups:");
+matrix.PrintGroups();
