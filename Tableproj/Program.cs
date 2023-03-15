@@ -1,4 +1,7 @@
-﻿using Tableproj.Model;
+﻿using System.Diagnostics;
+using Tableproj.Controller;
+using Tableproj.Model;
+using Tableproj.View;
 
 ////ExcelClass excel = new ExcelClass("C:\\Users\\trale\\OneDrive\\Desktop\\doc.xlsx");
 //ExcelClass excel = new ExcelClass();
@@ -25,27 +28,19 @@
 ////excel.SaveFile("doc.xlsx");
 ///
 
-MatrixClass matrix = new MatrixClass(10, 5);
+BinaryMatrix matrix = new BinaryMatrix(10, 5);
 matrix.FillMartixRandom();
-Console.WriteLine("Base matrix");
-matrix.PrintDataMatrix();
+ConsoleView.PrintBinaryMatrix(matrix);
 Console.WriteLine();
-matrix.CalculateSimilarity();
-Console.WriteLine("Similarity martix");
-matrix.PrintSimilarityMatrix();
-matrix.CalculateDistance();
+
+
+
+EuclidDistance euclidDistance = new EuclidDistance(10);
+euclidDistance.CalculateBinaryMatrixDistance(matrix);
+ConsoleView.PrintDoubleMatrix(euclidDistance);
 Console.WriteLine();
-Console.WriteLine("Distance matrix");
-matrix.PrintDistanceMatrix();
-Console.WriteLine();
-matrix.SetCriticalDistance(1);
-Console.WriteLine("Distance matrix aftrer critical distance");
-matrix.PrintDistanceMatrix();
-Console.WriteLine();
-matrix.TransitiveClosure();
-Console.WriteLine("Transitive Closure");
-matrix.PrintDistanceMatrix();
-matrix.FindGroups();
-Console.WriteLine();
-Console.WriteLine("Groups:");
-matrix.PrintGroups();
+
+TransitiveClosure transitive = new TransitiveClosure(euclidDistance, 1);
+transitive.CheckTransitiveClosure();
+ConsoleView.PrintBinaryMatrix(transitive);
+
