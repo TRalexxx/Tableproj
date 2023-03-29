@@ -195,15 +195,19 @@ namespace Tableproj.Model
             List<double[]> clusterCentres = GetClusterCenters(dataTable, clusterCenterIndices);
             int flag = -1;
             int[] clusterIndices = new int[dataTable.RowCount];
+            int[] clusterIndicesIter = new int[dataTable.RowCount];                
+            clusterIndices.CopyTo(clusterIndicesIter, 0);
             do
-            {
-                if(!clusterIndices.Equals(DisributeToClusters(dataTable, clusterCentres)))
+            {               
+                clusterIndices = DisributeToClusters(dataTable, clusterCentres);
+                clusterCentres = CalculateNewCenters(clusterIndices, dataTable);
+                if (clusterIndices.Equals(clusterIndicesIter))
                 {
-                    clusterIndices = DisributeToClusters(dataTable, clusterCentres);
-                    List<double[]> clusterCenters = CalculateNewCenters(clusterIndices, dataTable);
+                    flag = 1;
+                    break;
                 }
-                else flag = 1;
-                
+                clusterIndices.CopyTo(clusterIndicesIter, 0);
+
             } while (flag < 0);
 
             return new ClusteringResult(clusterIndices);
