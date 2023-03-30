@@ -201,7 +201,7 @@ namespace Tableproj.Model
             {               
                 clusterIndices = DisributeToClusters(dataTable, clusterCentres);
                 clusterCentres = CalculateNewCenters(clusterIndices, dataTable);
-                if (clusterIndices.Equals(clusterIndicesIter))
+                if (clusterIndices.SequenceEqual(clusterIndicesIter))
                 {
                     flag = 1;
                     break;
@@ -277,8 +277,7 @@ namespace Tableproj.Model
             int[] elementsCount = new int[_clustersCount];
             for(int i = 0;i<_clustersCount;i++)
             {
-                clusterCenters.Add(new double[dataTable.RowCount]);
-                clusterCenters[i] = new double[dataTable.ColumnCount];                
+                clusterCenters.Add(new double[dataTable.ColumnCount]);                              
             }
 
             
